@@ -7,4 +7,6 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'number-input-app';
+
+  externalValue: number = 12.65;
 }
