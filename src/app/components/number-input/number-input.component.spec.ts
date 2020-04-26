@@ -4,6 +4,9 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NumberInputComponent } from './number-input.component';
 import { FormsModule } from '@angular/forms';
 
+import * as numeral from 'numeral';
+import 'numeral/locales/nl-nl';
+
 
 @Component({
   selector: 'app-stub-number-input',
@@ -36,6 +39,8 @@ describe('NumberInputComponent', () => {
   }));
 
   beforeEach(() => {
+    numeral.locale('nl-nl');
+
     fixture = TestBed.createComponent(StubNumberInputComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -60,7 +65,7 @@ describe('NumberInputComponent', () => {
         expect(input).toBeDefined();
 
         const value = input.value;
-        expect(value).toEqual('12.65');
+        expect(value).toEqual('12,65');
       });
     });
   }));
@@ -73,7 +78,7 @@ describe('NumberInputComponent', () => {
       const input = inputElement.querySelector('input');
       expect(input).toBeDefined();
 
-      const newValue = '31.89';
+      const newValue = '31,89';
       input.value = newValue;
 
       const oninputevent = new Event('input');

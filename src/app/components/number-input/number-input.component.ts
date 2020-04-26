@@ -1,6 +1,10 @@
 import { Component, forwardRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
+import * as numeral from 'numeral';
+import 'numeral/locales/nl-nl';
+
+
 @Component({
   selector: 'app-number-input',
   templateUrl: './number-input.component.html',
@@ -22,7 +26,8 @@ export class NumberInputComponent implements ControlValueAccessor {
   set innerValue(value: string) {
     if (value !== this._innerValue) {
       this._innerValue = value;
-      this.onChange(parseFloat(value));
+      const numeralValue = numeral(value);
+      this.onChange(numeralValue.value());
     }
   }
 
@@ -30,7 +35,11 @@ export class NumberInputComponent implements ControlValueAccessor {
   private onTouched: () => void = () => { };
 
   writeValue(value: number): void {
-    this.innerValue = '' + value;
+    const numeralValue = numeral(value);
+    const formattedValue = numeralValue.format('0.0[00]');
+    if (formattedValue !== this.innerValue) {
+      this.innerValue = formattedValue;
+    }
   }
 
   registerOnChange(fn: any): void {
