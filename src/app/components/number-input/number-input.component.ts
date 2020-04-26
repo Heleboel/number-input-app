@@ -12,7 +12,19 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   }]
 })
 export class NumberInputComponent implements ControlValueAccessor {
-  innerValue: string = null;
+
+  private _innerValue: string = null;
+
+  get innerValue(): string {
+    return this._innerValue;
+  }
+
+  set innerValue(value: string) {
+    if (value !== this._innerValue) {
+      this._innerValue = value;
+      this.onChange(parseFloat(value));
+    }
+  }
 
   private onChange: (value: number) => void = () => { };
   private onTouched: () => void = () => { };
