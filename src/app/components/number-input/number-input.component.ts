@@ -1,5 +1,6 @@
-import { Component, forwardRef } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Component, forwardRef, ViewChild, Input } from '@angular/core';
+import { NgModel, ControlValueAccessor, Validator, AbstractControl, ValidationErrors } from '@angular/forms';
+import { NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
 
 import * as numeral from 'numeral';
 import 'numeral/locales/nl-nl';
@@ -13,9 +14,33 @@ import 'numeral/locales/nl-nl';
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => NumberInputComponent),
     multi: true
+  },
+  {
+    provide: NG_VALIDATORS,
+    useExisting: forwardRef(() => NumberInputComponent),
+    multi: true,
   }]
 })
-export class NumberInputComponent implements ControlValueAccessor {
+export class NumberInputComponent implements ControlValueAccessor, Validator {
+
+  get regex() {
+    if (this.decimals < 0) {
+      this.decimals = 0;
+    }
+
+    if (this.decimals === 0) {
+      return '^[0-9]+$';
+    }
+
+    const decimalToken = numeral.localeData().delimiters.decimal;
+
+    return '^[0-9]+(' + decimalToken + '[0-9]{0,' + this.decimals + '})?$';
+  }
+
+  @Input()
+  decimals = 2;
+
+  @ViewChild(NgModel) model: NgModel;
 
   private _innerValue: string = null;
 
@@ -33,6 +58,9 @@ export class NumberInputComponent implements ControlValueAccessor {
 
   private onChange: (value: number) => void = () => { };
   private onTouched: () => void = () => { };
+
+
+  // ControlValueAccessor implementation
 
   writeValue(value: number): void {
     const numeralValue = numeral(value);
@@ -52,5 +80,17 @@ export class NumberInputComponent implements ControlValueAccessor {
 
   setDisabledState?(isDisabled: boolean): void {
     throw new Error("Method not implemented.");
+  }
+
+
+  // Validations
+
+  validate(control: AbstractControl): ValidationErrors | null {
+
+    if (this.model && this.model.invalid) {
+      return { custom: true };
+    }
+
+    return null;
   }
 }

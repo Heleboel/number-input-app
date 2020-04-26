@@ -1,6 +1,8 @@
 <div>
-  <app-number-input [(ngModel)]="externalValue">
+  <app-number-input #input="ngModel" [(ngModel)]="externalValue" decimals="1">
   </app-number-input>
 
   <p>External value: {{externalValue}}</p>
+
+  <pre>{{input.control | json}}</pre>
 </div>
