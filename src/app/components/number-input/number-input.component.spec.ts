@@ -1,8 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NumberInputComponent } from './number-input.component';
 import { FormsModule } from '@angular/forms';
+import { NumberInputComponent } from './number-input.component';
 
 import * as numeral from 'numeral';
 import 'numeral/locales/nl-nl';
@@ -26,7 +26,7 @@ describe('NumberInputComponent', () => {
   let component: StubNumberInputComponent;
   let fixture: ComponentFixture<StubNumberInputComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
         FormsModule
@@ -36,7 +36,7 @@ describe('NumberInputComponent', () => {
         NumberInputComponent
       ]
     }).compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     numeral.locale('nl-nl');
@@ -50,7 +50,7 @@ describe('NumberInputComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should show the external value in the input box when defined.', async(() => {
+  it('should show the external value in the input box when defined.', () => {
     fixture.detectChanges();
     fixture.whenStable().then(() => {
       expect(component).toBeDefined();
@@ -68,9 +68,9 @@ describe('NumberInputComponent', () => {
         expect(value).toEqual('12,65');
       });
     });
-  }));
+  });
 
-  it('should emit the value put in the input box.', async(() => {
+  it('should emit the value put in the input box.', () => {
     fixture.detectChanges();
     fixture.whenStable().then(() => {
       const inputElement = fixture.debugElement.nativeElement;
@@ -90,5 +90,5 @@ describe('NumberInputComponent', () => {
         expect(value).toEqual(31.89);
       });
     });
-  }));
+  });
 });
